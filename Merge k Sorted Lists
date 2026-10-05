@@ -1,0 +1,42 @@
+class Solution {
+    public ListNode mergeKLists(ListNode[] lists) {
+        if (lists.length == 0) return null;
+
+        while (lists.length > 1) {
+            ListNode[] merged = new ListNode[(lists.length + 1) / 2];
+
+            for (int i = 0; i < lists.length / 2; i++) {
+                merged[i] = merge(lists[2 * i], lists[2 * i + 1]);
+            }
+
+            if (lists.length % 2 != 0) {
+                merged[merged.length - 1] = lists[lists.length - 1];
+            }
+
+            lists = merged;
+        }
+
+        return lists[0];
+    }
+
+    private ListNode merge(ListNode a, ListNode b) {
+        ListNode dummy = new ListNode(0);
+        ListNode curr = dummy;
+
+        while (a != null && b != null) {
+            if (a.val <= b.val) {
+                curr.next = a;
+                a = a.next;
+            } else {
+                curr.next = b;
+                b = b.next;
+            }
+
+            curr = curr.next;
+        }
+
+        curr.next = (a != null) ? a : b;
+
+        return dummy.next;
+    }
+}
